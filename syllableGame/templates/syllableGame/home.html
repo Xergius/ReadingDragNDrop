@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>A Leer!</title>
+
+    <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}">
+
+  </head>  
+    <body>   
+      
+      <div class='game'>
+        <!-- -----FIRST COLUMN---- -->
+          <div class="silabas-box">
+              <div  id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="div1a" draggable="true" ondragstart="drag(event)" id="drag1">mon</div>
+              </div>
+              <div  id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="div2b" draggable="true" ondragstart="drag(event)" id="drag2">ta</div>
+              </div>
+              <div  id="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="div1a" draggable="true" ondragstart="drag(event)" id="drag3">ma</div>
+              </div>
+              <div  id="div4" ondrop="drop(event)" ondragover="allowDrop(event)">
+                  <div class="div2b" draggable="true" ondragstart="drag(event)" id="drag4">si</div>
+              </div>
+      
+              
+          </div>
+         <!------ MiDDLE COLUMN---- -->
+          <div class="right-side">     
+                     
+              <!-- -------IMAGE-------- -->
+              <div id="imgs">
+                {% for x in frases %}              
+                  <img style="display:none" id="{{ x.name }}" src="{{ x.image.url }}" alt="">
+                {% endfor %}              
+              </div>
+              <!-- -----DROP FIELDS------- -->
+              <div id="drop-boxes" class="palabra-box">
+                  <!-- <div id="div5" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+                  <div id="div6" ondrop="drop(event)" ondragover="allowDrop(event)"></div> -->
+              </div>
+              </br>
+          </div>
+          <!-- --CENTER COLUMN------ -->
+          <div id="right-column">
+            <!-- SELECTOR LANGUAGE  -->
+            <div id="language-selector">   
+              <form name="speech-form">
+                <input id="speech-text" type="text" class="hidden txt">
+    
+                <div id="hidden">
+                  <label for="rate">Rate</label><input type="range" min="0.5" max="2" value="1" step="0.1" id="rate">
+                  <div class="rate-value">1</div>
+                  <div class="clearfix"></div>
+                </div>
+    
+                <div id="hidden">
+                  <label for="pitch">Pitch</label>
+                  <input type="range" min="0" max="2" value="1" step="0.1" id="pitch">
+                  <div class="pitch-value">1</div>
+                  <div class="clearfix"></div>
+                </div>
+    
+                <select id="sel">
+                </select>
+    
+                <div id='hidden' class="controls">
+                  <button id="play" type="submit">Play</button>
+                
+                </div>
+              </form>
+            </div>
+            <!-- FULESCREEN BUTTONS -->
+            <div id="fullscreen-btn">
+              <button onclick="openFullscreen()">Open Fullscreen</button>
+              <button onclick="closeFullscreen()">Close Fullscreen</button>
+            </div>
+            <!-- ----POINTS----- -->
+            <div id="points-div">
+              <h2 id="h2-points">Puntos:</h2>
+              <p id="points"></p>
+              <img id="coin-img" src="{% static 'animations/coin.png' %}" alt="">
+              <!-- <object data="{% static 'animations/coin.svg' %}" id="spin-coin"></object> -->
+            </div>
+          </div>   
+
+          <!-- ----AUDIO----- -->
+          <audio id="wrong-ans" src="{% static 'sounds/fart.ogg' %}" type="audio/ogg"></audio>
+          <audio id="right-ans" src="{% static 'sounds/correct_answer.ogg' %}" type="audio/ogg"></audio>
+      </div>
+          <!-- -----JAVASCRIPT------ -->
+      <script>
+          var all_frases = JSON.parse('{{ all_frases | safe }}');
+          var all_syllabes = JSON.parse('{{ all_syllabes | safe }}');
+          var all_elements = JSON.parse('{{ all_elements | safe }}');
+          
+
+          console.log(all_frases);
+          console.log(all_elements);
+          console.log(all_syllabes);
+          let points = 0;
+
+          let indexes_used = [];
+          let indexes_all = [];
+          let indexes_available = [];
+          for (let i = 0; i < all_frases.length; i++) {
+            indexes_all.push(i);
+          }
+
+          function render_all(){        
+  //----- SELECT RANDOM OBJECT--------
+          document.getElementById('points').innerHTML=points;
+          // let randindex = Math.floor(Math.random() * all_frases.length);
+          indexes_available = indexes_all.filter(x => !indexes_used.includes(x));
+          var randindex = indexes_available[Math.floor(Math.random()*indexes_available.length)];
+          indexes_used.push(randindex);
+          if (indexes_used.length===indexes_all.length && indexes_used.length<=10){
+            indexes_used.shift();
+          }
+          console.log(indexes_all); 
+
+          console.log('Available: '+indexes_available); 
+          console.log('Used: '+indexes_used);        
+          let num_done = [];
+          num_done.push("randindex");
+          console.log(all_frases[randindex].fields.name);
+          console.log(all_frases[randindex].fields.image);
+  //----- SET IMAGE --------
+          for (i in all_frases){
+            document.getElementById(all_frases[i].fields.name).setAttribute("style", "display:none");
+          }
+          document.getElementById(all_frases[randindex].fields.name).setAttribute("style", "display:block");
+
+  //----- GETING THE SYLLABES OF THE RANDOM OBJECT
+          let syllabes_frase = []
+          var filt_byfrase =  all_elements.filter(function(element) {
+          return element.fields.frase == all_frases[randindex].pk;
+          });
+
+          for (i in filt_byfrase){
+            let silaba_pk = filt_byfrase[i].fields.syllabe
+            var silaba =  all_syllabes.filter(function(syllab) {
+            return syllab.pk == silaba_pk;
+            });
+            syllabes_frase.push(silaba[0].fields.syllabe_name)
+          }
+          let sentence_list = [];
+          for (i in syllabes_frase){
+            if (syllabes_frase[i]=="space"){
+              sentence_list.push(" ");
+            }else {
+              sentence_list.push(syllabes_frase[i]);
+            }
+          } 
+          globalThis.sentence = sentence_list.join('');
+          console.log(sentence);
+          console.log(sentence);
+
+          
+          // CORRECT SYLLABES
+          globalThis.only_syllabes_frase = [];
+          for (element in syllabes_frase){
+            if (syllabes_frase[element] !== "space"){
+              only_syllabes_frase.push(syllabes_frase[element]);
+            }
+          }
+          console.log(only_syllabes_frase);
+          console.log(only_syllabes_frase);
+          console.log(only_syllabes_frase);
+
+          // WRONG SYLABES
+          let wrong_syllabes_list = [];
+          for (sylls in all_syllabes){                    
+            if (!(only_syllabes_frase.includes(all_syllabes[sylls].fields.syllabe_name)) && (all_syllabes[sylls].fields.syllabe_name!=="space")){
+            wrong_syllabes_list.push(all_syllabes[sylls].fields.syllabe_name);
+            }                    
+          }
+          // 4 OPTION ALTERNATIVES
+          var all4options = Object.assign([], only_syllabes_frase);
+          
+          let sil_length = only_syllabes_frase.length;
+          
+          for (let i = 0; i < (4-sil_length); i++){
+            let randsyll = Math.floor(Math.random() * wrong_syllabes_list.length);
+            console.log(randsyll);
+            all4options.push(wrong_syllabes_list[randsyll]);
+
+            wrong_syllabes_list = wrong_syllabes_list.filter(function(item) {
+              return item !==wrong_syllabes_list[randsyll];
+            })
+          }
+          // RANDOMIZE OPTIONS ARRAY
+          for (let i = all4options.length -1; i > 0; i--) {
+            let j = Math.floor(Math.random() * i)
+            let k = all4options[i]
+            all4options[i] = all4options[j]
+            all4options[j] = k
+          }
+          
+          console.log(all4options)
+          let randsyll = Math.floor(Math.random() * all_syllabes.length)
+  // ADD OPTIONS ON BOXES
+          for (i in all4options){
+            document.getElementById('drag'+ (parseFloat(i)+1)).innerHTML = all4options[i];
+            document.getElementById("div"+ (parseFloat(i)+1)).appendChild(document.getElementById('drag'+ (parseFloat(i)+1)));
+          }
+          
+          console.log(only_syllabes_frase);
+          
+
+  // ---- CREATE DROPBOXES----
+          var numadd = 0;
+          document.getElementById('drop-boxes').innerHTML = '';
+          for (syllab in syllabes_frase){
+            var box = document.createElement("div");
+            if (syllabes_frase[syllab] !=="space"){          
+              box.id = "div" + (parseFloat(numadd)+5);
+              box.setAttribute('ondrop',"drop(event)");
+              box.setAttribute('ondragover',"allowDrop(event)");
+              var numadd = parseFloat(numadd)+1;
+            } else {
+              box.setAttribute('class',"space-block");
+            }                   
+            // box.innerHTML = syllabes_frase[syllab];
+            document.getElementById("drop-boxes").appendChild(box);
+          }
+          return;
+        }
+        render_all();
+
+      </script>
+      <script src="{% static 'js/script.js' %}"></script>
+      <script src="{% static 'js/DragDropTouch.js' %}"></script>
+    </body>
+  
+</html>

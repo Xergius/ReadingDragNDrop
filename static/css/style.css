@@ -1,0 +1,282 @@
+html {
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  margin: 0;
+}
+
+body {
+  background-color: lightskyblue;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+}
+.game {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.silabas-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: fit-content;
+  max-height: 500px;
+}
+.silabas-box > div {
+  display: flex;
+  width: 125px;
+  height: 100px;
+  margin: 10px 4px;
+  border: 1px solid black;
+  font-size: 30px;
+  font-style: bold;
+  justify-items: center;
+  align-items: center;
+  border-radius: 25px;
+}
+/* .game > div {
+  flex: 1;
+} */
+
+/* #top-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+} */
+#points-div {
+  flex: 1;
+  margin-right: 100px;
+  margin-top: 50px;
+  justify-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 20px;
+}
+
+#h2-points {
+  margin-left: 30px;
+  display: inline;
+}
+#points {
+  margin-left: 30px;
+  display: inline;
+  font-size: xx-large;
+}
+#coin-img {
+  width: 50px;
+  height: auto;
+  margin-left: 20px;
+}
+
+#div5,
+#div6,
+#div7,
+#div8 {
+  display: flex;
+  width: 125px;
+  height: 100px;
+  margin: 10px 4px;
+  border: 1px solid black;
+  font-size: 30px;
+  font-style: bold;
+  justify-items: center;
+  align-items: center;
+  border-radius: 25px;
+}
+.div1a,
+.div2b {
+  width: 107px;
+  height: 80px;
+  margin: auto;
+  padding: 5px;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  line-height: 40px;
+  /* padding: 10px; */
+  border: 3px solid black;
+  background-color: orangered;
+  border-radius: 25px;
+}
+.space-block {
+  width: 50px;
+  display: flex;
+
+  height: 100px;
+}
+.palabra-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 300px;
+}
+#right-column {
+  display: flex;
+  flex-direction: column;
+}
+.right-side {
+  display: block;
+  margin-left: 10%;
+}
+.invisible {
+  display: none;
+}
+#silaba1,
+#silaba2,
+#gamepalabra {
+  display: none;
+}
+#game-countform {
+  display: none;
+}
+
+.hidden {
+  display: none;
+}
+#speech-text {
+  display: none;
+}
+#hidden {
+  display: none;
+}
+/* @media (min-device-width: 320px) and (max-device-width: 1080px) and (orientation: landscape)  */
+
+/* SPEECH */
+
+.txt,
+select,
+form > div {
+  display: block;
+  margin: 0 auto;
+  font-family: sans-serif;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.txt {
+  width: 80%;
+}
+
+select {
+  width: 83%;
+}
+
+form > div {
+  width: 81%;
+}
+
+.txt,
+form > div {
+  margin-bottom: 10px;
+  overflow: auto;
+}
+
+.clearfix {
+  clear: both;
+}
+
+label {
+  float: left;
+  width: 10%;
+  line-height: 1.5;
+}
+
+.rate-value,
+.pitch-value {
+  float: right;
+  width: 5%;
+  line-height: 1.5;
+}
+
+#rate,
+#pitch {
+  float: right;
+  width: 81%;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.controls button {
+  padding: 10px;
+}
+
+@media screen and (orientation: landscape) {
+  #div1,
+  #div2,
+  #div3,
+  #div4,
+  #div5,
+  #div6,
+  #div7,
+  #div8 {
+    font-size: 10vh;
+    display: flexbox;
+    padding: 2px;
+    /* width: min-content; */
+    height: 20vh;
+    margin: 5px;
+    width: 11vw;
+
+    justify-content: center;
+  }
+  .silabas-box {
+    /* width: inherit; */
+  }
+  .right-side {
+    width: 45vw;
+  }
+  #drag1,
+  #drag2,
+  #drag3,
+  #drag4 {
+    display: flexbox;
+    padding: 2px;
+    /* width: auto; */
+    height: 18vh;
+    margin: 1px;
+    line-height: 16vh;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 60vh;
+  }
+  #right-column {
+    width: 30vw;
+  }
+  #points-div {
+    padding: 0px 0;
+    justify-content: space-between;
+  }
+  .game {
+    width: 92vw;
+  }
+  .div1a,
+  .div2b {
+    width: 11vw;
+  }
+  .space-block {
+    width: 5vw;
+  }
+  #h2-points {
+    margin-left: 5%;
+  }
+}
